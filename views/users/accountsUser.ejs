@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuentas del Usuario</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Cuentas del Usuario</h1>
+  <h2>Usuario: <%= user.name %>
+  </h2>
+
+  <% if (accounts.loans.length> 0) { %>
+    <h2>Cuentas de Préstamos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Saldo</th>
+          <th>Tasa de Interés</th>
+          <th>Próxima Fecha de Pago</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% accounts.loans.forEach((loan)=> { %>
+          <tr>
+            <td>
+              <%= loan.id %>
+            </td>
+            <td>
+              <%= loan.balance %>
+            </td>
+            <td>
+              <%= loan.interestRate %>
+            </td>
+            <td>
+              <%= loan.nextPaymentDate %>
+            </td>
+            <td>
+              <a href="/loans/newMovement/<%= loan.id %>" class="button">Realizar Movimiento</a>
+              <a href="/loans/<%= loan.id %>/movements" class="button">Ver Movimientos</a>
+              <a href="/loans/<%= loan.id %>/delete/user" class="button_delete">Eliminar</a>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <h2>Cuentas de Préstamos</h2>
+      <p>El usuario no tiene cuentas de préstamos.</p>
+      <% } %>
+
+        <% if (accounts.savings.length> 0) { %>
+          <h2>Cuentas de Ahorro</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Saldo</th>
+                <th>Tasa de Interés</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% accounts.savings.forEach((saving)=> { %>
+                <tr>
+                  <td>
+                    <%= saving.id %>
+                  </td>
+                  <td>
+                    <%= saving.balance %>
+                  </td>
+                  <td>
+                    <%= saving.interestRate %>
+                  </td>
+                  <td>
+                    <a href="/savings/newMovement/<%= saving.id %>" class="button">Realizar Movimiento</a>
+                    <a href="/savings/<%= saving.id %>/movements" class="button">Ver Movimientos</a>
+                    <a href="/savings/<%= saving.id %>/delete/user" class="button_delete">Eliminar</a>
+                  </td>
+                </tr>
+                <% }); %>
+            </tbody>
+          </table>
+          <% } else { %>
+            <h2>Cuentas de Ahorro</h2>
+            <p>El usuario no tiene cuentas de ahorro.</p>
+            <% } %>
+
+              <% if (accounts.cooperatives.length> 0) { %>
+                <h2>Cuentas de Cooperativas</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Saldo</th>
+                      <th>Tasa de Interés</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% accounts.cooperatives.forEach((cooperative)=> { %>
+                      <tr>
+                        <td>
+                          <%= cooperative.id %>
+                        </td>
+                        <td>
+                          <%= cooperative.balance %>
+                        </td>
+                        <td>
+                          <%= cooperative.interestRate %>
+                        </td>
+                        <td>
+                          <a href="/cooperatives/newMovement/<%= cooperative.id %>" class="button">Realizar
+                            Movimiento</a>
+                          <a href="/cooperatives/<%= cooperative.id %>/movements" class="button">Ver Movimientos</a>
+                        </td>
+                      </tr>
+                      <% }); %>
+                  </tbody>
+                </table>
+                <% } else { %>
+                  <h2>Cuentas de Cooperativas</h2>
+                  <p>El usuario no tiene cuentas de cooperativas.</p>
+                  <% } %>
+
+                    <div class="button-group">
+                      <a href="/profile/" class="button_delete">Volver al Perfil</a>
+                    </div>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movimientos de Ahorros</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Movimientos de Ahorros</h1>
+
+  <% if (movements.length> 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>ID de Ahorros</th>
+          <th>Monto</th>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Nuevo Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% movements.forEach(movement=> { %>
+          <tr>
+            <td>
+              <%= movement.id %>
+            </td>
+            <td>
+              <%= movement.savingsId %>
+            </td>
+            <td>
+              <%= movement.amount %>
+            </td>
+            <td>
+              <%= movement.date.toISOString().split('T')[0] %>
+            </td>
+            <td>
+              <%= movement.type %>
+            </td>
+            <td>
+              <%= movement.newBalance %>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <h2>No existen movimientos.</h2>
+      <% } %>
+
+        <div class="button-group">
+          <button onclick="goBack()" class="button">Volver</button>
+        </div>
+
+        <script>
+          function goBack() {
+            window.history.back();
+          }
+        </script>
+</body>
+
+</html>

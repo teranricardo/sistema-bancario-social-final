@@ -99,6 +99,16 @@ router.get('/:id/accounts', verifyToken, verifyRole('admin'), async (req, res) =
   }
 });
 
+/* GET cuentas de un usuario */
+router.get('/:id/accounts/user', verifyToken, verifyRole('admin'), async (req, res) => {
+  try {
+    const { user, accounts } = await usersController.getAccounts(req.params.id);
+    res.render('users/accountsUser', { accounts, user });
+  } catch (err) {
+    res.status(500).send(`Error al obtener cuentas del usuario: ${err}`);
+  }
+});
+
 /* GET resumen de cuentas del usuario */
 router.get('/:id/accounts/summary', verifyToken, verifyRole('admin'), async (req, res) => {
   try {

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil del Usuario</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Perfil del Usuario</h1>
+  <p>Nombre: <%= user.name %>
+  </p>
+  <p>Username: <%= user.username %>
+  </p>
+
+  <div>
+    <a href="/savings/new-saving" class="button">Crear Cuenta de Ahorro</a>
+    <a href="/loans/new-loan" class="button">Crear Préstamo</a>
+  </div>
+
+  <div>
+    <a href="/users/<%= user.id %>/accounts/user" class="button">Ver Cuentas</a>
+  </div>
+
+  <a href="/menu" class="button_delete">Volver al Menú</a>
+</body>
+
+</html>

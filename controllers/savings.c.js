@@ -1,5 +1,6 @@
 var savingsModel = require("../models/savings.m");
 var usersModel = require("../models/users.m");
+const savingsMovementsModel = require('../models/savings_movements')
 
 class SavingController {
   async createForm() {
@@ -99,6 +100,47 @@ class SavingController {
       throw new Error(`Error al eliminar la cuenta de ahorro: ${err}`);
     }
   }
+
+  async showMovements(savingsId) {
+    try {
+      const movements = await savingsMovementsModel.showBySavingsId(savingsId);
+      return { movements };
+    } catch (err) {
+      throw new Error(`Error al listar los movimientos: ${err}`);
+    }
+  }
+
+  async createMovement(data) {
+    const { savingsId, amount, type } = data;
+    if (!savingsId || !amount || !type) {
+      throw new Error("Faltan datos del movimiento.");
+    }
+    try {
+      const savings = await savingsModel.showByID(savingsId);
+      if (!savings) {
+        throw new Error(`No se encontró la cuenta de ahorros con ID: ${savingsId}`);
+      }
+      const newBalance = type === 'Deposito' ? savings.balance + amount : savings.balance - amount;
+
+      const movement = {
+        savingsId,
+        amount,
+        date: new Date(),
+        type,
+        newBalance,
+        // interestEarned: type === 'interest' ? amount : 0, // Solo si decides registrar intereses explícitamente
+      };
+
+      await savingsMovementsModel.create(movement);
+      await savingsModel.edit({ ...savings, balance: newBalance }, savingsId);
+
+      return { success: true };
+    } catch (err) {
+      throw new Error(`Error al crear el movimiento: ${err}`);
+    }
+  }
+
+
 }
 
 module.exports = new SavingController();

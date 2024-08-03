@@ -1,5 +1,6 @@
 const loansModel = require('../models/loans.m');
 const usersModel = require('../models/users.m');
+const loanMovementsModel = require('../models/loans_movements.m');
 
 class LoansController {
   async createForm() {
@@ -112,6 +113,48 @@ class LoansController {
       return { id: loan.id, date: loan.nextPaymentDate };
     } catch (err) {
       throw new Error(`Error al buscar el préstamo: ${err}`);
+    }
+  }
+
+  async createMovement(data) {
+    const { loanId, amount, type } = data;
+    if (!loanId || !amount || !type) {
+      throw new Error("Faltan datos del movimiento.");
+    }
+    try {
+      const loan = await loansModel.showByID(loanId);
+      if (!loan) {
+        throw new Error(`No se encontró el préstamo con ID: ${loanId}`);
+      }
+      const newBalance = loan.balance + amount;
+      const interestPaid = type === 'Interés' ? amount : 0;
+      const capitalPaid = type === 'Capital' ? amount : 0;
+
+      const movement = {
+        loanId,
+        amount,
+        date: new Date(),
+        type,
+        newBalance,
+        interestPaid,
+        capitalPaid,
+      };
+
+      await loanMovementsModel.create(movement);
+      await loansModel.edit({ ...loan, balance: newBalance }, loanId);
+
+      return { success: true };
+    } catch (err) {
+      throw new Error(`Error al crear el movimiento: ${err}`);
+    }
+  }
+
+  async showMovements(loanId) {
+    try {
+      const movements = await loanMovementsModel.showByLoanId(loanId);
+      return { movements };
+    } catch (err) {
+      throw new Error(`Error al listar los movimientos: ${err}`);
     }
   }
 }
