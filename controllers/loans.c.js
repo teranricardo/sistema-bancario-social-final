@@ -2,120 +2,117 @@ const loansModel = require('../models/loans.m');
 const usersModel = require('../models/users.m');
 
 class LoansController {
-  createForm(req, res) {
-    usersModel.show()
-      .then((users) => {
-        res.render('loans/new', { users });
-      })
-      .catch((err) => res.status(500).send(`Error al obtener usuarios: ${err}`));
-  }
-
-  create(req, res) {
-    const loan = req.body;
-    console.log(loan)
-    if (!loan.userId || !loan.amount || !loan.interestRate || !loan.balance || !loan.nextPaymentDate) {
-      return res.status(400).send("Faltan datos del préstamo por agregar.");
+  async createForm() {
+    try {
+      const users = await usersModel.show();
+      return { users };
+    } catch (err) {
+      throw new Error(`Error al obtener usuarios: ${err}`);
     }
-
-    usersModel.showByID(loan.userId)
-      .then((user) => {
-        if (!user) {
-          return res.status(404).send(`No se encontró el usuario con ID: ${loan.userId}`);
-        }
-        loan.nextPaymentDate = new Date(req.body.nextPaymentDate);
-        loan.createdAt = new Date();
-        return loansModel.create(loan)
-          .then(() => res.redirect('/loans'))
-          .catch((err) => res.status(500).send(`Error al crear el préstamo: ${err}`));
-      })
-      .catch((err) => res.status(500).send(`Error al crear el préstamo: ${err}`));
   }
 
-  show(req, res) {
-    loansModel.show()
-      .then((loans) => res.render('loans/index', { loans }))
-      .catch((err) => res.status(500).send(`Error al listar los préstamos: ${err}`));
+  async create(data) {
+    const { userId, amount, interestRate, balance, nextPaymentDate } = data;
+    if (!userId || !amount || !interestRate || !balance || !nextPaymentDate) {
+      throw new Error("Faltan datos del préstamo por agregar.");
+    }
+    try {
+      const user = await usersModel.showByID(userId);
+      if (!user) {
+        throw new Error(`No se encontró el usuario con ID: ${userId}`);
+      }
+      const loan = {
+        userId,
+        amount,
+        interestRate,
+        balance,
+        nextPaymentDate: new Date(nextPaymentDate),
+        createdAt: new Date()
+      };
+      await loansModel.create(loan);
+      return { success: true };
+    } catch (err) {
+      throw new Error(`Error al crear el préstamo: ${err}`);
+    }
   }
 
-  showByID(req, res) {
-    const id = req.params.id;
-    loansModel.showByID(id)
-      .then((loan) => {
-        if (!loan) {
-          return res.status(404).send(`No se encontró el préstamo con ID: ${id}`);
-        }
-        res.render('loans/show', { loan });
-      })
-      .catch((err) => res.status(500).send(`Error al buscar el préstamo: ${err}`));
+  async show() {
+    try {
+      const loans = await loansModel.show();
+      return { loans };
+    } catch (err) {
+      throw new Error(`Error al listar los préstamos: ${err}`);
+    }
   }
 
-  edit(req, res) {
-    const id = req.params.id;
-
-    Promise.all([loansModel.showByID(id), usersModel.show()])
-      .then(([loan, users]) => {
-        if (!loan) {
-          return res.status(404).send(`No se encontró el préstamo con ID: ${id}`);
-        }
-        res.render('loans/edit', { loan, users });
-      })
-      .catch((err) => res.status(500).send(`Error al cargar el préstamo para editar: ${err}`));
+  async showByID(id) {
+    try {
+      const loan = await loansModel.showByID(id);
+      if (!loan) {
+        throw new Error(`No se encontró el préstamo con ID: ${id}`);
+      }
+      return { loan };
+    } catch (err) {
+      throw new Error(`Error al buscar el préstamo: ${err}`);
+    }
   }
 
-  update(req, res) {
-    const id = req.params.id;
-    const updatedLoan = req.body;
-
-    loansModel.showByID(id)
-      .then((loan) => {
-        if (!loan) {
-          return res.status(404).send(`No se encontró el préstamo con ID: ${id}`);
-        }
-
-        const newLoan = {
-          id: id,
-          userId: updatedLoan.userId ? updatedLoan.userId : loan.userId,
-          amount: updatedLoan.amount ? updatedLoan.amount : loan.amount,
-          interestRate: updatedLoan.interestRate ? updatedLoan.interestRate : loan.interestRate,
-          balance: updatedLoan.balance ? updatedLoan.balance : loan.balance,
-          nextPaymentDate: updatedLoan.nextPaymentDate ? new Date(updatedLoan.nextPaymentDate) : loan.nextPaymentDate,
-          createdAt: loan.createdAt,
-        };
-
-        return loansModel.edit(newLoan, id)
-          .then(() => res.redirect(`/loans/${id}`))
-          .catch((err) => res.status(500).send(`Error al editar el préstamo: ${err}`));
-      })
-      .catch((err) => res.status(500).send(`Error al editar el préstamo: ${err}`));
+  async edit(id) {
+    try {
+      const [loan, users] = await Promise.all([loansModel.showByID(id), usersModel.show()]);
+      if (!loan) {
+        throw new Error(`No se encontró el préstamo con ID: ${id}`);
+      }
+      return { loan, users };
+    } catch (err) {
+      throw new Error(`Error al cargar el préstamo para editar: ${err}`);
+    }
   }
 
-
-  delete(req, res) {
-    const id = req.params.id;
-
-    loansModel.delete(id)
-      .then((result) => {
-        if (!result) {
-          return res.status(404).send(`No se encontró el préstamo con ID: ${id}`);
-        }
-        res.redirect('/loans');
-      })
-      .catch((err) => res.status(500).send(`Error al eliminar el préstamo: ${err}`));
+  async update(id, data) {
+    try {
+      const loan = await loansModel.showByID(id);
+      if (!loan) {
+        throw new Error(`No se encontró el préstamo con ID: ${id}`);
+      }
+      const updatedLoan = {
+        id,
+        userId: data.userId || loan.userId,
+        amount: data.amount || loan.amount,
+        interestRate: data.interestRate || loan.interestRate,
+        balance: data.balance || loan.balance,
+        nextPaymentDate: data.nextPaymentDate ? new Date(data.nextPaymentDate) : loan.nextPaymentDate,
+        createdAt: loan.createdAt,
+      };
+      await loansModel.edit(updatedLoan, id);
+      return { success: true };
+    } catch (err) {
+      throw new Error(`Error al editar el préstamo: ${err}`);
+    }
   }
 
-  getNextPaymentDate(req, res) {
-    const id = req.params.id;
-    loansModel.showByID(id)
-      .then((loan) => {
-        if (!loan) {
-          return res.status(404).send(`No se encontró el préstamo con ID: ${id}`);
-        }
-        const date = loan.nextPaymentDate;
-        const id = loan.id;
-        res.status(200).render("next-payment-date");
-        res.render('next-payment-date', { id, date });
-      })
-      .catch((err) => res.status(500).send(`Error al buscar el préstamo: ${err}`));
+  async delete(id) {
+    try {
+      const result = await loansModel.delete(id);
+      if (!result) {
+        throw new Error(`No se encontró el préstamo con ID: ${id}`);
+      }
+      return { success: true };
+    } catch (err) {
+      throw new Error(`Error al eliminar el préstamo: ${err}`);
+    }
+  }
+
+  async getNextPaymentDate(id) {
+    try {
+      const loan = await loansModel.showByID(id);
+      if (!loan) {
+        throw new Error(`No se encontró el préstamo con ID: ${id}`);
+      }
+      return { id: loan.id, date: loan.nextPaymentDate };
+    } catch (err) {
+      throw new Error(`Error al buscar el préstamo: ${err}`);
+    }
   }
 }
 
