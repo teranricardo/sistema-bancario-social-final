@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalles del Préstamo</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Detalles del Préstamo</h1>
+    <table class="details">
+      <tr>
+        <td><strong>ID</strong></td>
+        <td>
+          <%= loan.id %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>ID del Usuario</strong></td>
+        <td>
+          <%= loan.userId %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Monto</strong></td>
+        <td>
+          <%= loan.amount %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Tasa de Interés</strong></td>
+        <td>
+          <%= loan.interestRate %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Balance</strong></td>
+        <td>
+          <%= loan.balance %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Próxima fecha de pago</strong></td>
+        <td>
+          <%= loan.nextPaymentDate %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Creado</strong></td>
+        <td>
+          <%= loan.createdAt %>
+        </td>
+      </tr>
+    </table>
+    <div class="button-group">
+      <a href="/loans/<%= loan.id %>/edit" class="button">Editar Préstamo</a>
+      <a href="/loans/<%= loan.id %>/delete" class="button_delete">Eliminar</a>
+      <a href="/loans" class="button">Volver al Listado</a>
+    </div>
+  </div>
+</body>
+
+</html>

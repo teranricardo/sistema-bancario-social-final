@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Cuenta de Ahorro</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Crear Cuenta de Ahorro</h1>
+  <form action="/savings" method="POST">
+    <label for="userId">Usuario:</label>
+    <select id="userIdDropdown" onchange="updateUserId()">
+      <option value="">Seleccione un usuario</option>
+      <% users.forEach(user=> { %>
+        <option value="<%= user.id %>">
+          <%= user.name %> (ID: <%= user.id %>)
+        </option>
+        <% }); %>
+    </select>
+    <label for="userId">ID del Usuario:</label>
+    <input type="text" id="userId" name="userId" required>
+    <label for="interestRate">Tasa de Interés:</label>
+    <input type="number" step="0.01" id="interestRate" name="interestRate" required>
+    <label for="balance">Balance:</label>
+    <input type="number" step="0.01" id="balance" name="balance" required>
+    <div class="button-group">
+      <button type="submit" class="button">Crear Cuenta</button>
+      <a href="/savings" class="button_delete">Cancelar</a>
+    </div>
+  </form>
+
+  <script>
+    function updateUserId() {
+      const dropdown = document.getElementById('userIdDropdown');
+      const selectedUserId = dropdown.options[dropdown.selectedIndex].value;
+      document.getElementById('userId').value = selectedUserId;
+    }
+
+  </script>
+</body>
+
+</html>

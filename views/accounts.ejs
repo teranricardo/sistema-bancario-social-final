@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <p>Bienvenido <%= name %>
+  </p>
+  <h1>
+    <%= title %>
+  </h1>
+  <hr>
+
+  <h2>Préstamos</h2>
+  <% loans.forEach(function(loan) { %>
+    <div>
+      <hr>
+      <p><strong>ID:</strong>
+        <%= loan.id %>
+      </p>
+      <p><strong>Monto:</strong>
+        <%= loan.amount %>
+      </p>
+      <p><strong>Tasa de interés:</strong>
+        <%= loan.interestRate %>
+      </p>
+      <p><strong>Balance:</strong>
+        <%= loan.balance %>
+      </p>
+      <p><strong>Próxima fecha de pago:</strong>
+        <%= loan.nextPaymentDate %>
+      </p>
+      <p><strong>Creada:</strong>
+        <%= loan.createdAt %>
+      </p>
+    </div>
+    <% }) %>
+      <hr>
+
+      <h2>Cuentas de Ahorro</h2>
+      <% savings.forEach(function(saving) { %>
+        <div>
+          <hr>
+          <p><strong>ID:</strong>
+            <%= saving.id %>
+          </p>
+          <p><strong>Tasa de interés:</strong>
+            <%= saving.interestRate %>
+          </p>
+          <p><strong>Balance:</strong>
+            <%= saving.balance %>
+          </p>
+          <p><strong>Creada:</strong>
+            <%= saving.createdAt %>
+          </p>
+        </div>
+        <% }) %>
+          <hr>
+
+          <h2>Cooperativas</h2>
+          <% cooperatives.forEach(function(cooperative) { %>
+            <hr>
+
+            <p><strong>ID:</strong>
+              <%= cooperative.id %>
+            </p>
+            <p><strong>Nombre:</strong>
+              <%= cooperative.name %>
+            </p>
+            <p><strong>Balance:</strong>
+              <%= cooperative.balance %>
+            </p>
+            <p><strong>Tasa de interés:</strong>
+              <%= cooperative.interestRate %>
+            </p>
+            <p><strong>Balance:</strong>
+              <%= cooperative.balance %>
+            </p>
+            <p><strong>Creada:</strong>
+              <%= cooperative.createdAt %>
+            </p>
+            <% }) %>
+</body>
+
+</html>

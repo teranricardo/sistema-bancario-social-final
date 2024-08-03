@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Cuentas del Usuario</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <h1>Resumen de Cuentas del Usuario</h1>
+    <h2>Usuario: <%= user.name %></h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cuenta</th>
+                <th>Total de Saldo</th>
+                <th>Tasa de Interés Promedio</th>
+                <th>Saldo Promedio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Préstamos</td>
+                <td><%= summary.loans.balance %></td>
+                <td><%= summary.loans.averageInterestRate %></td>
+                <td><%= summary.loans.averageBalance %></td>
+            </tr>
+            <tr>
+                <td>Ahorros</td>
+                <td><%= summary.savings.balance %></td>
+                <td><%= summary.savings.averageInterestRate %></td>
+                <td><%= summary.savings.averageBalance %></td>
+            </tr>
+            <tr>
+                <td>Cooperativas</td>
+                <td><%= summary.cooperatives.balance %></td>
+                <td><%= summary.cooperatives.averageInterestRate %></td>
+                <td><%= summary.cooperatives.averageBalance %></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="button-group">
+        <a href="/users/<%= user.id %>" class="button">Volver a los Detalles del Usuario</a>
+        <a href="/users/" class="button_delete">Volver al Listado de Usuarios</a>
+    </div>
+</body>
+
+</html>

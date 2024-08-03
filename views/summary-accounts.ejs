@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <p>Bienvenido <%= name %>
+  </p>
+  <h1>
+    <%= title %>
+  </h1>
+  <hr>
+
+  <h2>Préstamos</h2>
+  <p><strong>Balance:</strong>
+    <%= loans.balance %>
+  </p>
+  <p><strong>Promedio de tasas de intéres:</strong>
+    <%= loans.averageInterestRate %>
+  </p>
+  <p><strong>Promedio de montos:</strong>
+    <%= loans.averageBalance %>
+  </p>
+  <hr>
+
+  <h2>Cuentas de Ahorro</h2>
+  <p><strong>Balance:</strong>
+    <%= savings.balance %>
+  </p>
+  <p><strong>Promedio de tasas de intéres:</strong>
+    <%= savings.averageInterestRate %>
+  </p>
+  <p><strong>Promedio de montos:</strong>
+    <%= savings.averageBalance %>
+  </p>
+  <hr>
+
+  <h2>Cooperativas</h2>
+  <p><strong>Balance:</strong>
+    <%= cooperatives.balance %>
+  </p>
+  <p><strong>Promedio de tasas de intéres:</strong>
+    <%= cooperatives.averageInterestRate %>
+  </p>
+  <p><strong>Promedio de montos:</strong>
+    <%= cooperatives.averageBalance %>
+  </p>
+  <hr>
+
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Préstamo</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Editar Préstamo</h1>
+  <form id="editForm" action="/loans/<%= loan.id %>" method="POST">
+    <label for="userId">Usuario:</label>
+    <select id="userIdDropdown" onchange="updateUserId()">
+      <option value="">Seleccione un usuario</option>
+      <% users.forEach(user => { %>
+        <option value="<%= user.id %>" <%= user.id === loan.userId ? 'selected' : '' %>>
+          <%= user.name %> (ID: <%= user.id %>)
+        </option>
+      <% }); %>
+    </select>
+
+    <label for="userId">ID del Usuario:</label>
+    <input type="text" id="userId" name="userId" value="<%= loan.userId %>" required readonly>
+
+    <label for="amount">Monto:</label>
+    <input type="number" step="0.01" id="amount" name="amount" value="<%= loan.amount %>" required>
+
+    <label for="interestRate">Tasa de Interés:</label>
+    <input type="number" step="0.01" id="interestRate" name="interestRate" value="<%= loan.interestRate %>" required>
+
+    <label for="balance">Balance:</label>
+    <input type="number" step="0.01" id="balance" name="balance" value="<%= loan.balance %>" required>
+
+    <label for="nextPaymentDate">Próxima Fecha de Pago:</label>
+    <input type="date" id="nextPaymentDate" name="nextPaymentDate" value="<%= loan.nextPaymentDate.toISOString().split('T')[0] %>" required>
+
+    <div class="button-group">
+      <button type="button" class="button" onclick="updateLoan()">Guardar Cambios</button>
+      <a href="/loans" class="button_delete">Cancelar</a>
+    </div>
+  </form>
+
+  <script>
+    document.getElementById('editForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      updateLoan();
+    });
+
+    function updateUserId() {
+      const dropdown = document.getElementById('userIdDropdown');
+      const selectedUserId = dropdown.options[dropdown.selectedIndex].value;
+      document.getElementById('userId').value = selectedUserId;
+    }
+
+    function updateLoan() {
+      const loanId = '<%= loan.id %>';
+      const userId = document.getElementById('userId').value;
+      const amount = document.getElementById('amount').value;
+      const interestRate = document.getElementById('interestRate').value;
+      const balance = document.getElementById('balance').value;
+      const nextPaymentDate = document.getElementById('nextPaymentDate').value;
+
+      fetch(`/loans/${loanId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId,
+          amount,
+          interestRate,
+          balance,
+          nextPaymentDate
+        })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al actualizar el préstamo');
+          }
+          window.location.href = "/loans/";
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          window.location.href = "/loans/";
+        });
+    }
+  </script>
+</body>
+
+</html>

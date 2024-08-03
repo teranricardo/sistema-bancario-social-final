@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Usuario</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Detalles del Usuario</h1>
+        <table class="details">
+            <tr>
+                <td><strong>ID</strong></td>
+                <td>
+                    <%= user.id %>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Nombre</strong></td>
+                <td>
+                    <%= user.name %>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Username</strong></td>
+                <td>
+                    <%= user.username %>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Rol</strong></td>
+                <td>
+                    <%= user.role %>
+                </td>
+            </tr>
+        </table>
+        <div class="button-group">
+            <a href="/users/<%= user.id %>/accounts" class="button">Ver Cuentas</a>
+            <a href="/users/<%= user.id %>/accounts/summary" class="button">Ver Resumen de Cuentas</a>
+            <a href="/users/<%= user.id %>/edit" class="button">Editar Usuario</a>
+            <a href="/users/<%= user.id %>/delete" class="button_delete">Eliminar</a>
+            <a href="/users" class="button_delete">Volver al Listado</a>
+        </div>
+    </div>
+</body>
+
+</html>

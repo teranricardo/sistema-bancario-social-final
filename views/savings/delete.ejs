@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmar Eliminación</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Confirmar Eliminación</h1>
+  <p>¿Estás seguro de eliminar la cuenta de ahorro con ID <%= savingId %>?</p>
+  <button id="confirmDeleteButton" class="button_delete" data-saving-id="<%= savingId %>">Eliminar</button>
+  <a href="/savings" class="button">Cancelar</a>
+
+  <script>
+    document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+      const savingId = this.getAttribute('data-saving-id');
+
+      fetch(`/savings/${savingId}`, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          window.location.href = '/savings';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          window.location.href = '/error';
+        });
+    }
+    );
+  </script>
+</body>
+
+</html>

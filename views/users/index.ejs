@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Usuarios</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Listado de Usuarios</h1>
+
+  <% if (users.length> 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Username</th>
+          <th>Rol</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user=> { %>
+          <tr>
+            <td>
+              <%= user.id %>
+            </td>
+            <td>
+              <%= user.name %>
+            </td>
+            <td>
+              <%= user.username %>
+            </td>
+            <td>
+              <%= user.role %>
+            </td>
+            <td>
+              <a href="/users/<%= user.id %>" class="button">Ver</a>
+              <a href="/users/<%= user.id %>/edit" class="button">Editar</a>
+              <a href="/users/<%= user.id %>/delete" class="button_delete">Eliminar</a>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <h2>No existen usuarios.</h2>
+      <% } %>
+
+        <div class="button-group">
+          <a href="/users/new" class="button">Crear Usuario</a>
+          <a href="/menu" class="button_delete">Menú Principal</a>
+        </div>
+</body>
+
+</html>

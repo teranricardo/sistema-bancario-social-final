@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Préstamos</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Listado de Préstamos</h1>
+
+  <% if (loans.length> 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>ID del Usuario</th>
+          <th>Monto</th>
+          <th>Tasa de Interés</th>
+          <th>Balance</th>
+          <th>Próxima fecha de pago</th>
+          <th>Creado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% loans.forEach(loans=> { %>
+          <tr>
+            <td>
+              <%= loans.id %>
+            </td>
+            <td>
+              <%= loans.userId %>
+            </td>
+            <td>
+              <%= loans.amount %>
+            </td>
+            <td>
+              <%= loans.interestRate %>
+            </td>
+            <td>
+              <%= loans.balance %>
+            </td>
+            <td>
+              <%= loans.nextPaymentDate %>
+            </td>
+            <td>
+              <%= loans.createdAt %>
+            </td>
+            <td>
+              <a href="/loans/<%= loans.id %>" class="button">Ver</a>
+              <a href="/loans/<%= loans.id %>/edit" class="button">Editar</a>
+              <a href="/loans/<%= loans.id %>/delete" class="button_delete">Eliminar</a>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <h2>No existen préstamos.</h2>
+      <% } %>
+
+        <div class="button-group">
+          <a href="/loans/new" class="button">Crear Préstamo</a>
+          <a href="/menu" class="button_delete">Menú Principal</a>
+        </div>
+        <script>
+        </script>
+</body>
+
+</html>

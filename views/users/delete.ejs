@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmar Eliminación</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Confirmar Eliminación</h1>
+  <p>¿Estás seguro de eliminar al usuario con ID <%= userId %>?</p>
+  <button id="confirmDeleteButton" class="button_delete" data-user-id="<%= userId %>">Eliminar</button>
+  <a href="/users" class="button">Cancelar</a>
+
+  <script>
+    document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+      const userId = this.getAttribute('data-user-id');
+
+      fetch(`/users/${userId}`, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          window.location.href = '/users';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          window.location.href = '/error';
+        });
+    }
+    );
+  </script>
+</body>
+
+</html>

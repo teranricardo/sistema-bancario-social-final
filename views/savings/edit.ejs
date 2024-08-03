@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Cuenta de Ahorro</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Editar Cuenta de Ahorro</h1>
+  <form id="editForm" action="/savings/<%= saving.id %>" method="POST">
+    <label for="userId">Usuario:</label>
+    <select id="userIdDropdown" onchange="updateUserId()">
+      <option value="">Seleccione un usuario</option>
+      <% users.forEach(user=> { %>
+      <option value="<%= user.id %>" <%=user.id===saving.userId ? 'selected' : '' %>><%= user.name %> (ID: <%= user.id %>)</option>
+      <% }); %>
+    </select>
+
+    <label for="userId">ID del Usuario:</label>
+    <input type="text" id="userId" name="userId" value="<%= saving.userId %>" required readonly>
+
+    <label for="interestRate">Tasa de Interés:</label>
+    <input type="number" step="0.01" id="interestRate" name="interestRate" value="<%= saving.interestRate %>" required>
+
+    <label for="balance">Balance:</label>
+    <input type="number" step="0.01" id="balance" name="balance" value="<%= saving.balance %>" required>
+
+    <div class="button-group">
+      <button type="button" class="button" onclick="updateSaving()">Guardar Cambios</button>
+      <a href="/savings" class="button_delete">Cancelar</a>
+    </div>
+  </form>
+
+  <script>
+    document.getElementById('editForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      updateSaving();
+    });
+
+    function updateUserId() {
+      const dropdown = document.getElementById('userIdDropdown');
+      const selectedUserId = dropdown.options[dropdown.selectedIndex].value;
+      document.getElementById('userId').value = selectedUserId;
+    }
+
+    function updateSaving() {
+      const savingId = '<%= saving.id %>';
+      const userId = document.getElementById('userId').value;
+      const interestRate = document.getElementById('interestRate').value;
+      const balance = document.getElementById('balance').value;
+
+      fetch(`/savings/${savingId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId,
+          interestRate,
+          balance
+        })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al actualizar la cuenta de ahorro');
+          }
+          window.location.href = "/savings/";
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          window.location.href = "/savings/";
+        });
+    }
+  </script>
+</body>
+
+</html>

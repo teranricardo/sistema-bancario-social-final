@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Cuentas de Ahorro</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Listado de Cuentas de Ahorro</h1>
+
+  <% if (savings.length> 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>ID del Usuario</th>
+          <th>Tasa de Interés</th>
+          <th>Balance</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% savings.forEach(saving=> { %>
+          <tr>
+            <td>
+              <%= saving.id %>
+            </td>
+            <td>
+              <%= saving.userId %>
+            </td>
+            <td>
+              <%= saving.interestRate %>
+            </td>
+            <td>
+              <%= saving.balance %>
+            </td>
+            <td>
+              <a href="/savings/<%= saving.id %>" class="button">Ver</a>
+              <a href="/savings/<%= saving.id %>/edit" class="button">Editar</a>
+              <a href="/savings/<%= saving.id %>/delete" class="button_delete">Eliminar</a>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <h2>No existen cuentas de ahorro.</h2>
+      <% } %>
+
+        <div class="button-group">
+          <a href="/savings/new" class="button">Crear Cuenta</a>
+          <a href="/menu" class="button_delete">Menú Principal</a>
+        </div>
+        <script>
+        </script>
+</body>
+
+</html>
