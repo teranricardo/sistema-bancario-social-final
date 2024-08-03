@@ -14,23 +14,33 @@
     <table class="details">
       <tr>
         <td><strong>ID</strong></td>
-        <td><%= saving.id %></td>
+        <td>
+          <%= saving.id %>
+        </td>
       </tr>
       <tr>
         <td><strong>ID del Usuario</strong></td>
-        <td><%= saving.userId %></td>
+        <td>
+          <%= saving.userId %>
+        </td>
       </tr>
       <tr>
         <td><strong>Tasa de Interés</strong></td>
-        <td><%= saving.interestRate %></td>
+        <td>
+          <%= saving.interestRate %>
+        </td>
       </tr>
       <tr>
         <td><strong>Balance</strong></td>
-        <td><%= saving.balance %></td>
+        <td>
+          <%= saving.balance %>
+        </td>
       </tr>
     </table>
     <div class="button-group">
       <a href="/savings/<%= saving.id %>/edit" class="button">Editar Cuenta</a>
+      <a href="/savings/newMovement/<%= saving.id %>" class="button">Realizar Movimiento</a>
+      <a href="/savings/<%= saving.id %>/movements" class="button">Ver Movimientos</a>
       <a href="/savings/<%= saving.id %>/delete" class="button_delete">Eliminar</a>
       <a href="/savings" class="button">Volver al Listado</a>
     </div>

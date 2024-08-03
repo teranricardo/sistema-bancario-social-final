@@ -41,7 +41,7 @@
               <%= loan.nextPaymentDate %>
             </td>
             <td>
-              <a href="/loans/newMovement/<%= loan.id %>" class="button">Realizar Movimiento</a>
+              <a href="/loans/newMovementUser/<%= loan.id %>" class="button">Realizar Movimiento</a>
               <a href="/loans/<%= loan.id %>/movements" class="button">Ver Movimientos</a>
               <a href="/loans/<%= loan.id %>/delete/user" class="button_delete">Eliminar</a>
             </td>
@@ -78,7 +78,7 @@
                     <%= saving.interestRate %>
                   </td>
                   <td>
-                    <a href="/savings/newMovement/<%= saving.id %>" class="button">Realizar Movimiento</a>
+                    <a href="/savings/newMovementUser/<%= saving.id %>" class="button">Realizar Movimiento</a>
                     <a href="/savings/<%= saving.id %>/movements" class="button">Ver Movimientos</a>
                     <a href="/savings/<%= saving.id %>/delete/user" class="button_delete">Eliminar</a>
                   </td>

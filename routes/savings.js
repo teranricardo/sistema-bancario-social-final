@@ -15,7 +15,7 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 /* GET formulario de creación de cuenta de ahorro */
-router.get('/new', verifyToken, verifyRole('admin'), async (req, res) => {
+router.get('/new', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     const { users } = await savingsController.createForm();
     res.render('savings/new', { users });
@@ -25,7 +25,7 @@ router.get('/new', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 // Formulario para crear una cuenta de ahorro de un usuario
-router.get('/new-saving', verifyToken, async function (req, res, next) {
+router.get('/new-saving', verifyToken, verifyRole(['usuario', 'admin']), async function (req, res, next) {
   try {
     const user = await userController.showByID(req.user.id); // Obtener los datos del usuario logueado
     res.render('savings/newUser', { user });
@@ -35,7 +35,7 @@ router.get('/new-saving', verifyToken, async function (req, res, next) {
 });
 
 /* POST crear nueva cuenta de ahorro */
-router.post('/', verifyToken, verifyRole('admin'), async (req, res) => {
+router.post('/', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     await savingsController.create(req.body);
     res.redirect('/savings');
@@ -44,8 +44,8 @@ router.post('/', verifyToken, verifyRole('admin'), async (req, res) => {
   }
 });
 
-/* POST crear nueva cuenta de ahorro */
-router.post('/user', verifyToken, verifyRole('admin'), async (req, res) => {
+/* POST crear nueva cuenta de ahorro (usuario)*/
+router.post('/user', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     await savingsController.create(req.body);
     res.redirect('/profile');
@@ -55,7 +55,7 @@ router.post('/user', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 /* GET detalle de cuenta de ahorro por ID */
-router.get('/:id', verifyToken, async (req, res) => {
+router.get('/:id', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     const { saving } = await savingsController.showByID(req.params.id);
     res.render('savings/show', { saving });
@@ -65,7 +65,7 @@ router.get('/:id', verifyToken, async (req, res) => {
 });
 
 /* GET formulario de edición de cuenta de ahorro */
-router.get('/:id/edit', verifyToken, verifyRole('admin'), async (req, res) => {
+router.get('/:id/edit', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     const { saving, users } = await savingsController.edit(req.params.id);
     res.render('savings/edit', { saving, users });
@@ -75,7 +75,7 @@ router.get('/:id/edit', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 /* PUT actualizar cuenta de ahorro */
-router.put('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
+router.put('/:id', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     await savingsController.update(req.params.id, req.body);
     res.redirect(`/savings/${req.params.id}`);
@@ -85,18 +85,17 @@ router.put('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 /* GET confirmación de eliminación */
-router.get('/:id/delete', verifyToken, verifyRole('admin'), (req, res) => {
+router.get('/:id/delete', verifyToken, verifyRole(['admin']), (req, res) => {
   res.render('savings/delete', { savingId: req.params.id });
 });
 
 /* GET confirmación de eliminación */
-router.get('/:id/delete/user', verifyToken, verifyRole('admin'), (req, res) => {
+router.get('/:id/delete/user', verifyToken, verifyRole(['usuario', 'admin']), (req, res) => {
   res.render('savings/deleteUser', { savingId: req.params.id });
 });
 
-
 /* DELETE eliminar cuenta de ahorro */
-router.delete('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
+router.delete('/:id', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     await savingsController.delete(req.params.id);
     res.redirect('/savings');
@@ -105,7 +104,8 @@ router.delete('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
   }
 });
 
-router.get('/newMovement/:savingId', verifyToken, async (req, res) => {
+/* GET formulario de nuevo movimiento de cuenta de ahorro */
+router.get('/newMovement/:savingId', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     const savingId = req.params.savingId;
 
@@ -115,8 +115,19 @@ router.get('/newMovement/:savingId', verifyToken, async (req, res) => {
   }
 });
 
+/* GET formulario de nuevo movimiento de cuenta de ahorro (usuario) */
+router.get('/newMovementUser/:savingId', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
+  try {
+    const savingId = req.params.savingId;
+
+    res.render('savings/newMovementUser', { savingId });
+  } catch (err) {
+    res.status(500).send(`Error al cargar el formulario de movimiento: ${err}`);
+  }
+});
+
 /* POST crear movimiento de cuenta de ahorro */
-router.post('/:id/movements', verifyToken, async (req, res) => {
+router.post('/:id/movements', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     await savingsController.createMovement({ ...req.body, savingsId: req.params.id });
     res.redirect(`/profile`);
@@ -125,8 +136,18 @@ router.post('/:id/movements', verifyToken, async (req, res) => {
   }
 });
 
+/* POST crear movimiento de cuenta de ahorro admin */
+router.post('/:id/movements/admin', verifyToken, verifyRole(['admin']), async (req, res) => {
+  try {
+    await savingsController.createMovement({ ...req.body, savingsId: req.params.id });
+    res.redirect(`/savings`);
+  } catch (err) {
+    res.status(500).send(`Error al crear el movimiento: ${err}`);
+  }
+});
+
 /* GET listar movimientos de cuenta de ahorro */
-router.get('/:id/movements', verifyToken, async (req, res) => {
+router.get('/:id/movements', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     const { movements } = await savingsController.showMovements(req.params.id);
     res.render('savings/movements', { movements });

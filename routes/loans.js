@@ -5,7 +5,7 @@ const userController = require('../controllers/users.c');
 const { verifyToken, verifyRole } = require('../middlewares/auth');
 
 /* POST crear préstamo */
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     await loansController.create(req.body);
     res.redirect('/loans');
@@ -14,8 +14,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-/* POST crear préstamo */
-router.post('/user', async (req, res) => {
+/* POST crear préstamo (usuario)*/
+router.post('/user', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     await loansController.create(req.body);
     res.redirect('/profile');
@@ -25,7 +25,7 @@ router.post('/user', async (req, res) => {
 });
 
 /* GET formulario de creación de préstamo */
-router.get('/new', verifyToken, verifyRole('admin'), async (req, res) => {
+router.get('/new', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     const { users } = await loansController.createForm();
     res.render('loans/new', { users });
@@ -35,7 +35,7 @@ router.get('/new', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 // Formulario para crear un préstamo de un usuario
-router.get('/new-loan', verifyToken, async function (req, res, next) {
+router.get('/new-loan', verifyToken, verifyRole(['usuario', 'admin']), async function (req, res, next) {
   try {
     const user = await userController.showByID(req.user.id); // Obtener los datos del usuario logueado
     res.render('loans/newUser', { user });
@@ -45,7 +45,7 @@ router.get('/new-loan', verifyToken, async function (req, res, next) {
 });
 
 /* GET listado de préstamos */
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     const { loans } = await loansController.show();
     res.render('loans/index', { loans });
@@ -55,7 +55,7 @@ router.get('/', async (req, res) => {
 });
 
 /* GET detalle de préstamo por ID */
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     const { loan } = await loansController.showByID(req.params.id);
     res.render('loans/show', { loan });
@@ -65,7 +65,7 @@ router.get('/:id', async (req, res) => {
 });
 
 /* GET formulario de edición de préstamo */
-router.get('/:id/edit', verifyToken, verifyRole('admin'), async (req, res) => {
+router.get('/:id/edit', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     const { loan, users } = await loansController.edit(req.params.id);
     res.render('loans/edit', { loan, users });
@@ -75,7 +75,7 @@ router.get('/:id/edit', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 /* PUT actualizar préstamo */
-router.put('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
+router.put('/:id', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     await loansController.update(req.params.id, req.body);
     res.redirect(`/loans/${req.params.id}`);
@@ -85,17 +85,17 @@ router.put('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 /* GET confirmación de eliminación */
-router.get('/:id/delete', verifyToken, verifyRole('admin'), (req, res) => {
+router.get('/:id/delete', verifyToken, verifyRole(['admin']), (req, res) => {
   res.render('loans/delete', { loanId: req.params.id });
 });
 
-/* GET confirmación de eliminación */
-router.get('/:id/delete/user', verifyToken, verifyRole('admin'), (req, res) => {
+/* GET confirmación de eliminación usuario*/
+router.get('/:id/delete/user', verifyToken, verifyRole(['usuario', 'admin']), (req, res) => {
   res.render('loans/deleteUser', { loanId: req.params.id });
 });
 
 /* DELETE eliminar préstamo */
-router.delete('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
+router.delete('/:id', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     await loansController.delete(req.params.id);
     res.redirect('/loans');
@@ -105,7 +105,7 @@ router.delete('/:id', verifyToken, verifyRole('admin'), async (req, res) => {
 });
 
 /* GET próxima fecha de pago de préstamo */
-router.get('/next-payment-date/:id', verifyToken, verifyRole('admin'), async (req, res) => {
+router.get('/next-payment-date/:id', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     const { id, date } = await loansController.getNextPaymentDate(req.params.id);
     res.render('next-payment-date', { id, date });
@@ -115,7 +115,7 @@ router.get('/next-payment-date/:id', verifyToken, verifyRole('admin'), async (re
 });
 
 /* GET formulario de nuevo movimiento de préstamo */
-router.get('/newMovement/:loanId', verifyToken, async (req, res) => {
+router.get('/newMovement/:loanId', verifyToken, verifyRole(['admin']), async (req, res) => {
   try {
     const loanId = req.params.loanId;
     res.render('loans/newMovement', { loanId });
@@ -124,8 +124,18 @@ router.get('/newMovement/:loanId', verifyToken, async (req, res) => {
   }
 });
 
-/* POST crear movimiento de préstamo */
-router.post('/:id/movements', verifyToken, async (req, res) => {
+/* GET formulario de nuevo movimiento de préstamo */
+router.get('/newMovementUser/:loanId', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
+  try {
+    const loanId = req.params.loanId;
+    res.render('loans/newMovementUser', { loanId });
+  } catch (err) {
+    res.status(500).send(`Error al cargar el formulario de movimiento: ${err}`);
+  }
+});
+
+/* POST crear movimiento de préstamo (usuario)*/
+router.post('/:id/movements', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     await loansController.createMovement({ ...req.body, loanId: req.params.id });
     res.redirect(`/profile`);
@@ -134,8 +144,19 @@ router.post('/:id/movements', verifyToken, async (req, res) => {
   }
 });
 
+/* POST crear movimiento de préstamo admin */
+router.post('/:id/movements/admin', verifyToken, verifyRole(['admin']), async (req, res) => {
+  try {
+    await loansController.createMovement({ ...req.body, loanId: req.params.id });
+    res.redirect(`/loans`);
+  } catch (err) {
+    res.status(500).send(`Error al crear el movimiento: ${err}`);
+  }
+});
+
+
 /* GET listar movimientos de préstamo */
-router.get('/:id/movements', verifyToken, async (req, res) => {
+router.get('/:id/movements', verifyToken, verifyRole(['usuario', 'admin']), async (req, res) => {
   try {
     const { movements } = await loansController.showMovements(req.params.id);
     res.render('loans/movements', { movements });

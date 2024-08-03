@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nuevo Movimiento de Ahorro</title>
+  <title>Nuevo Movimiento de Préstamo</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
-  <h1>Nuevo Movimiento de Ahorro</h1>
-  <form action="/savings/<%= savingId %>/movements/admin" method="POST">
-    <input type="hidden" id="savingId" name="savingId" value="<%= savingId %>">
+  <h1>Nuevo Movimiento de Préstamo</h1>
+  <form action="/loans/<%= loanId %>/movements" method="POST">
+    <input type="hidden" id="loanId" name="loanId" value="<%= loanId %>">
 
     <label for="amount">Monto:</label>
     <input type="number" id="amount" name="amount" required>
@@ -21,8 +21,8 @@
 
     <label for="type">Tipo de Movimiento:</label>
     <select id="type" name="type" required>
-      <option value="Deposito">Depósito</option>
-      <option value="Retiro">Retiro</option>
+      <option value="Interés">Interés</option>
+      <option value="Capital">Capital</option>
     </select>
 
     <button type="submit">Crear Movimiento</button>
