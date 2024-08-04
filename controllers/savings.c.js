@@ -128,7 +128,6 @@ class SavingController {
         date: new Date(),
         type,
         newBalance,
-        // interestEarned: type === 'interest' ? amount : 0, // Solo si decides registrar intereses explícitamente
       };
 
       await savingsMovementsModel.create(movement);

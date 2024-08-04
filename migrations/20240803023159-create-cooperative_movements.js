@@ -3,11 +3,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('loans', {
+    await queryInterface.createTable('cooperative_movements', {
       id: {
         type: Sequelize.CHAR(36),
         allowNull: false,
         primaryKey: true,
+      },
+      cooperativeId: {
+        type: Sequelize.CHAR(36),
+        allowNull: false,
       },
       userId: {
         type: Sequelize.CHAR(36),
@@ -17,34 +21,18 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
-      interestRate: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-      },
-      balance: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-      },
-      nextPaymentDate: {
+      date: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      createdAt: {
-        type: Sequelize.DATE,
+      feeNumber: {
+        type: Sequelize.STRING,
         allowNull: false,
-      },
-      capital: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: true,
-      },
-      interestPaid: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: true,
       },
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('loans');
+    await queryInterface.dropTable('cooperative_movements');
   },
 };

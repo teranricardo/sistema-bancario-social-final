@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listado de Cooperativas</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Listado de Cooperativas</h1>
+
+  <% if (cooperatives.length> 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Monto de la Cuota</th>
+          <th>Cuota Actual</th>
+          <th>Número de Miembros</th>
+          <th>Frecuencia de Pago</th>
+          <th>Creado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% cooperatives.forEach(cooperative=> { %>
+          <tr>
+            <td>
+              <%= cooperative.id %>
+            </td>
+            <td>
+              <%= cooperative.name %>
+            </td>
+            <td>
+              <%= cooperative.feeAmount %>
+            </td>
+            <td>
+              <%= cooperative.currentFee %>
+            </td>
+            <td>
+              <%= cooperative.numberOfMembers %>
+            </td>
+            <td>
+              <%= cooperative.paymentFrequency %>
+            </td>
+            <td>
+              <%= new Date(cooperative.createdAt).toLocaleDateString() %>
+            </td>
+            <td>
+              <a href="/cooperatives/<%= cooperative.id %>" class="button">Ver</a>
+              <a href="/cooperatives/<%= cooperative.id %>/edit" class="button">Editar</a>
+              <a href="/cooperatives/<%= cooperative.id %>/delete" class="button_delete">Eliminar</a>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+    <% } else { %>
+      <h2>No existen cooperativas.</h2>
+      <% } %>
+
+        <div class="button-group">
+          <a href="/cooperatives/new" class="button">Crear Cooperativa</a>
+          <a href="/admin" class="button_delete">Panel Admin</a>
+        </div>
+</body>
+
+</html>

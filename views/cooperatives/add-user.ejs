@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Miembro a Cooperativa</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Agregar Miembro a Cooperativa</h1>
+  <form action="/cooperatives/<%= cooperative.id %>/add-user" method="POST">
+    <label for="userId">Usuario:</label>
+    <select id="userIdDropdown" onchange="updateUserId()">
+      <option value="">Seleccione un usuario</option>
+      <% users.forEach(user=> { %>
+        <option value="<%= user.id %>">
+          <%= user.name %> (ID: <%= user.id %>)
+        </option>
+        <% }); %>
+    </select>
+    <label for="userId">ID del Usuario:</label>
+    <input type="text" id="userId" name="userId" required>
+    <input type="hidden" name="cooperative_id" value="<%= cooperative.id %>"> <!-- Cambiado aquí -->
+    <div class="button-group">
+      <button type="submit" class="button">Agregar Miembro</button>
+      <a href="/cooperatives/<%= cooperative.id %>" class="button_delete">Cancelar</a>
+    </div>
+  </form>
+
+  <script>
+    function updateUserId() {
+      const dropdown = document.getElementById('userIdDropdown');
+      const selectedUserId = dropdown.options[dropdown.selectedIndex].value;
+      document.getElementById('userId').value = selectedUserId;
+    }
+  </script>
+</body>
+
+</html>

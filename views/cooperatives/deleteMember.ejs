@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmar Eliminación</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Confirmar Eliminación</h1>
+  <p>¿Estás seguro de eliminar el miembro con ID <%= memberId %> de la cooperativa con ID <%= cooperativeId %>?</p>
+  <button id="confirmDeleteButton" class="button_delete" data-member-id="<%= memberId %>" data-cooperative-id="<%= cooperativeId %>">Eliminar</button>
+  <a href="/cooperatives/<%= cooperativeId %>" class="button">Cancelar</a>
+
+  <script>
+    document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+      const memberId = this.getAttribute('data-member-id');
+      const cooperativeId = this.getAttribute('data-cooperative-id');
+
+      fetch(`/cooperatives/${cooperativeId}/members/${memberId}`, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          if (response.ok) {
+            window.location.href = `/cooperatives/${cooperativeId}`;
+          } else {
+            throw new Error('Error al eliminar el miembro');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          window.location.href = '/error';
+        });
+    });
+  </script>
+</body>
+
+</html>

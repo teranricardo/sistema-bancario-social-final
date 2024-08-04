@@ -1,0 +1,72 @@
+<!-- <!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Cooperativa</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Crear Cooperativa</h1>
+  <form action="/cooperatives" method="POST">
+    <label for="name">Nombre de la Cooperativa:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="balance">Balance:</label>
+    <input type="number" step="0.01" id="balance" name="balance" required>
+
+    <label for="interestRate">Tasa de Interés:</label>
+    <input type="number" step="0.01" id="interestRate" name="interestRate" required>
+
+    <label for="createdAt">Fecha de Creación:</label>
+    <input type="date" id="createdAt" name="createdAt" required>
+
+    <div class="button-group">
+      <button type="submit" class="button">Crear Cooperativa</button>
+      <a href="/cooperatives" class="button_delete">Cancelar</a>
+    </div>
+  </form>
+</body>
+
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Cooperativa</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <h1>Crear Cooperativa</h1>
+  <form action="/cooperatives" method="POST">
+    <label for="name">Nombre de la Cooperativa:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="feeAmount">Monto de la Cuota:</label>
+    <input type="number" step="0.01" id="feeAmount" name="feeAmount" required>
+
+    <label for="numberOfMembers">Número de Miembros:</label>
+    <input type="number" id="numberOfMembers" name="numberOfMembers" required>
+
+    <label for="paymentFrequency">Frecuencia de Pago:</label>
+    <select id="paymentFrequency" name="paymentFrequency" required>
+      <option value="semanal">Semanal</option>
+      <option value="quincenal">Quincenal</option>
+      <option value="mensual">Mensual</option>
+    </select>
+
+    <div class="button-group">
+      <button type="submit" class="button">Crear Cooperativa</button>
+      <a href="/cooperatives" class="button_delete">Cancelar</a>
+    </div>
+  </form>
+</body>
+
+</html>

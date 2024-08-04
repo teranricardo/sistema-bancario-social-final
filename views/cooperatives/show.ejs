@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalles de la Cooperativa</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Detalles de la Cooperativa</h1>
+    <table class="details">
+      <tr>
+        <td><strong>ID</strong></td>
+        <td>
+          <%= cooperative.id %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Nombre</strong></td>
+        <td>
+          <%= cooperative.name %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Monto de la Cuota</strong></td>
+        <td>
+          <%= cooperative.feeAmount %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Cuota Actual</strong></td>
+        <td>
+          <%= cooperative.currentFee %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Número de Miembros</strong></td>
+        <td>
+          <%= cooperative.numberOfMembers %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Frecuencia de Pago</strong></td>
+        <td>
+          <%= cooperative.paymentFrequency %>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Creado</strong></td>
+        <td>
+          <%= new Date(cooperative.createdAt).toLocaleDateString() %>
+        </td>
+      </tr>
+    </table>
+
+    <h2>Miembros</h2>
+    <% if (cooperative.members.length> 0) { %>
+      <table class="details">
+        <thead>
+          <tr>
+            <th>ID del Miembro</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% cooperative.members.forEach(member=> { %>
+            <tr>
+              <td>
+                <%= member.user_id %>
+              </td>
+              <td>
+                <%= member.user_name %>
+              </td>
+              <td>
+                <a href="/cooperatives/<%= cooperative.id %>/members/<%= member.user_id %>/delete"
+                  class="button_delete">Eliminar</a>
+              </td>
+            </tr>
+            <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <p>No hay miembros en esta cooperativa.</p>
+        <% } %>
+
+          <div class="button-group">
+            <a href="/cooperatives/<%= cooperative.id %>/edit" class="button">Editar Cooperativa</a>
+            <a href="/cooperatives/<%= cooperative.id %>/add-user" class="button">Añadir Miembro</a>
+            <a href="/cooperatives/<%= cooperative.id %>/delete" class="button_delete">Eliminar</a>
+            <a href="/cooperatives" class="button">Volver al Listado</a>
+          </div>
+
+          <form action="/cooperatives/<%= cooperative.id %>/pay-fees" method="POST">
+            <button type="submit" class="button">Pagar Cuotas</button>
+          </form>
+
+  </div>
+</body>
+
+</html>

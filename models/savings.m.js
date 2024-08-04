@@ -41,6 +41,16 @@ class SavingsModel {
     });
   }
 
+  editBalance(saving, id) {
+    return new Promise((resolve, reject) => {
+      const query = 'UPDATE savings SET balance = ? WHERE id = ?';
+      const values = [saving.balance, id];
+      pool.query(query, values)
+        .then(([result]) => resolve(result.affectedRows))
+        .catch(error => reject(error));
+    });
+  }
+
   delete(id) {
     return new Promise((resolve, reject) => {
       const query = 'DELETE FROM savings WHERE id = ?';

@@ -13,15 +13,27 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
-      interestRate: {
-        type: Sequelize.FLOAT,
-        allowNull: true,
-      },
-      balance: {
+      feeAmount: { // Monto de la cuota
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
       },
+      currentFee: { // Cuota actual
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      numberOfMembers: { // Número de miembros
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      paymentFrequency: { // Frecuencia de pago
+        type: Sequelize.ENUM('semanal', 'quincenal', 'mensual'),
+        allowNull: true,
+      },
       createdAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: true,
       },
